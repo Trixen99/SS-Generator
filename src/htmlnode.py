@@ -19,11 +19,15 @@ class HTMLNode:
 
     def __repr__(self):
         convert = lambda input: f'"{input}"' if input != None else None
+        dict_convert = lambda input: input if input != None else None
         if self.children == None:
-            return f"tag = {convert(self.tag)}\nvalue = {convert(self.value)}\nchildren = {convert(self.children)}\nprops = {convert(self.props)}"
+            return f"tag = {convert(self.tag)}, value = {convert(self.value)}, children = {convert(self.children)}, props = {dict_convert(self.props)}"
         else:
-            new_children = ", ".join(self.children)
-            return f"tag = {convert(self.tag)}\nvalue = {convert(self.value)}\nchildren = {new_children}\nprops = {convert(self.props)}"
+            children_list = []
+            for child in self.children:
+                children_list.append(f"{str(child)}()")
+            new_children = "".join(str(children_list)).replace("()", "\n")
+            return f"tag = {convert(self.tag)}, value = {convert(self.value)}, \nchildren = {new_children},\nprops = {dict_convert(self.props)}"
 
 
             
