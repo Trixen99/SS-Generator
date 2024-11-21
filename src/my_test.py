@@ -1,9 +1,10 @@
 from htmlnode import *
 from textnode import *
 
-node = TextNode("hello",TextType.ITALIC,None)
+#node = TextNode("hello",TextType.IMAGE, "www.themain.com")
 
 
 #print(node)
-node_2 = text_node_to_html_node(node)
-print(node_2)
+
+#print(text_node_to_html_node(node))
+

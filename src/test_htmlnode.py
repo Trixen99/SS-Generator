@@ -130,8 +130,40 @@ class TestHTMLNode(unittest.TestCase):
         self.assertEqual(text_node_to_html_node(node), test)
 
     def test_text_node_to_html_node_2(self):
-        node = TextNode("a",TextType.LINK,"www.themain.com")
+        node = TextNode("hello",TextType.LINK,"www.themain.com")
         test = LeafNode("a", "hello", {"href": "www.themain.com"})
         self.assertEqual(text_node_to_html_node(node), test)
 
+    def test_text_node_to_html_node_3(self):
+        node = TextNode("hello",TextType.BOLD)
+        test = LeafNode("b", "hello")
+        self.assertEqual(text_node_to_html_node(node), test)
     
+    def test_text_node_to_html_node_4(self):
+        node = TextNode("hello",TextType.CODE)
+        test = LeafNode("code", "hello")
+        self.assertEqual(text_node_to_html_node(node), test)
+
+    def test_text_node_to_html_node_5(self):
+        node = TextNode("hello",TextType.TEXT)
+        test = LeafNode(None, "hello")
+        self.assertEqual(text_node_to_html_node(node), test)
+
+    def test_text_node_to_html_node_6(self):
+        node = TextNode("hello",TextType.TEXT)
+        test = LeafNode(None, "hello")
+        self.assertEqual(text_node_to_html_node(node), test)
+    
+    def test_text_node_to_html_node_7(self):
+        node = TextNode("hello",TextType.IMAGE, "www.themain.com")
+        test = LeafNode("img","",{"src": "www.themain.com", "alt": "hello"})
+        self.assertEqual(text_node_to_html_node(node), test)
+
+    def test_text_node_to_html_node_8(self):
+        node = TextNode("hello", "PROP", "www.themain.com")
+        with self.assertRaises(Exception):
+            text_node_to_html_node(node)
+
+
+
+
