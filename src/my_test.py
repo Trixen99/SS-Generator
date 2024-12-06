@@ -1,19 +1,26 @@
-from htmlnode import *
-from textnode import *
-from delimiter import *
+from split_nodes import *
 
-#node = TextNode("This is text with a `code block` word", TextType.TEXT)
-#node2 = TextNode("This is text with a `code block` word number 2", TextType.BOLD)
-#node3 = TextNode("This is text with a code block word number `2`", TextType.BOLD)
-#new_nodes = split_nodes_delimiter([node, node2], "`", TextType.CODE)
+node = TextNode(
+    "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)",
+    TextType.TEXT,
+)
 
-#print(f"new nodes\n{new_nodes}")
+node2 = TextNode(
+    "This is text with a link that is going to destroy the world [google](https://www.google.com) and marry my daughter[Shia LaBeouf](https://en.wikipedia.org/wiki/Shia_LaBeouf)",
+    TextType.TEXT,
+)
 
 
-node = TextNode("This `is text` with a `code block` word", TextType.TEXT)
-new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)
+new_nodes = split_nodes_link([node])
+print(new_nodes)
 
-print(f"new nodes\n{new_nodes}")
-
+# [
+#     TextNode("This is text with a link ", TextType.TEXT),
+#     TextNode("to boot dev", TextType.LINK, "https://www.boot.dev"),
+#     TextNode(" and ", TextType.TEXT),
+#     TextNode(
+#         "to youtube", TextType.LINK, "https://www.youtube.com/@bootdotdev"
+#     ),
+# ]
 
 

@@ -19,6 +19,4 @@ class TestExtractMarkdown(unittest.TestCase):
         expected_text = [("leader here", "https://linkgoeshere.gif"), ("destory", "https://mightguy.gif")]
         self.assertEqual(extract_markdown_images(text), expected_text)
 
-    #def test_eq_4(self):
-    #    text = "look im here [to boot dev](https://www.boot.dev) but not for long![rick roll](https://i.imgur.com/aKaOqIh.gif)"
-        
+
