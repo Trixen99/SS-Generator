@@ -13,20 +13,20 @@ def split_nodes_image(old_nodes):
         
         for image in extracted_images:
             if isinstance(extracted_text,list):
-                e_text = extracted_text[-1].split(f"[{image[0]}]({image[1]})")
+                e_text = extracted_text[-1].split(f"![{image[0]}]({image[1]})")
                 extracted_text.remove(extracted_text[-1])
                 extracted_text.extend(e_text)
             else:
-                extracted_text = extracted_text.split(f"[{image[0]}]({image[1]})")
+                extracted_text = extracted_text.split(f"![{image[0]}]({image[1]})")
         for number in range(len(extracted_text)):
             if (extracted_text[number]) == "":
                 extracted_text.pop(number)
         image_count = 0
         for text_number in range(len(extracted_text)):
             new_nodes = TextNode(extracted_text[text_number],TextType.TEXT)
-            link_node = TextNode(extracted_images[image_count][0],TextType.LINK,f'"{extracted_images[image_count][1]}"')
+            image_node = TextNode(extracted_images[image_count][0],TextType.IMAGE,str(extracted_images[image_count][1]))
             text_nodes.append(new_nodes)
-            text_nodes.append(link_node)
+            text_nodes.append(image_node)
             image_count += 1
     return text_nodes
 
@@ -52,7 +52,7 @@ def split_nodes_link(old_nodes):
         link_count = 0
         for text_number in range(len(extracted_text)):
             new_nodes = TextNode(extracted_text[text_number],TextType.TEXT)
-            link_node = TextNode(extracted_links[link_count][0],TextType.LINK,f'"{extracted_links[link_count][1]}"')
+            link_node = TextNode(extracted_links[link_count][0],TextType.LINK,str(extracted_links[link_count][1]))
             text_nodes.append(new_nodes)
             text_nodes.append(link_node)
             link_count += 1

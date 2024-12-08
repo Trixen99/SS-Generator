@@ -9,8 +9,7 @@ def extract_markdown_links(text):
     
 
 
-#text = "[Click for [info]](http://example.com)"
-#print(extract_markdown_links(text))
+
 
     
 
