@@ -24,5 +24,17 @@ class TestSPLITNODE(unittest.TestCase):
                         TextNode("to youtube", TextType.LINK, "https://www.youtube.com/@bootdotdev"),]
         self.assertEqual(split_nodes_link([node]),expected_text)
 
+    def test_eq_3(self):
+        node = TextNode(
+               "Hello my dear friends this is [text to link](www.google.com) and i am [deadly](www.spooky.com). Kill all [fiends](www.zombie.com)",
+                TextType.TEXT,
+                )
+        expected_text = [TextNode("Hello my dear friends this is ", TextType.TEXT),
+                        TextNode("text to link", TextType.LINK, "www.google.com"),
+                        TextNode(" and i am ", TextType.TEXT),
+                        TextNode("deadly", TextType.LINK, "www.spooky.com"),
+                        TextNode(". Kill all ", TextType.TEXT),
+                        TextNode("fiends", TextType.LINK, "www.zombie.com"),
+        ]
 
-
+        self.assertEqual(split_nodes_link([node]),expected_text)
