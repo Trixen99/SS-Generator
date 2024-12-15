@@ -24,7 +24,7 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
             count += 1
             continue
 
-    final_list.extend(split_nodes_list)
+        final_list.extend(split_nodes_list)
     return final_list
 
 

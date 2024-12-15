@@ -1,5 +1,6 @@
 from textnode import *
 from extract_markdown import *
+from delimiter import *
 
 
 def split_nodes_image(old_nodes):
@@ -12,7 +13,7 @@ def split_nodes_image(old_nodes):
             text_nodes.append(node)
             continue
         extracted_text = node.text
-        text_nodes.extend(split_part_two(extracted_text, images, split))
+        text_nodes.extend(split_nodes_part_two(extracted_text, images, split))
     return text_nodes
 
 
@@ -26,12 +27,12 @@ def split_nodes_link(old_nodes):
             text_nodes.append(node)
             continue
         extracted_text = node.text
-        text_nodes.extend(split_part_two(extracted_text, links, split))
+        text_nodes.extend(split_nodes_part_two(extracted_text, links, split))
     return text_nodes
         
 
 
-def split_part_two(extracted_text, iterables, split):
+def split_nodes_part_two(extracted_text, iterables, split):
         node_list = []
         for iterable in iterables:
             split_text = None
@@ -50,3 +51,26 @@ def split_part_two(extracted_text, iterables, split):
         if extracted_text != "":
             node_list.append(TextNode(extracted_text, TextType.TEXT))
         return(node_list)
+
+
+
+
+def text_to_textnodes(text):
+    delimiters = ["**","*","`"]
+    text_type = None
+    textnodes = [TextNode(text,TextType.TEXT,None)]
+    for delimiter in delimiters:
+        match delimiter:
+            case "**":
+                   text_type = TextType.BOLD
+            case "*":
+                   text_type = TextType.ITALIC
+            case "`":
+                   text_type = TextType.CODE
+            case _:
+                pass
+        textnodes = split_nodes_delimiter(textnodes, delimiter, text_type)
+    textnodes = split_nodes_link(split_nodes_image(textnodes))
+            
+    #textnodes = split_nodes_delimiter(split_nodes_delimiter(split_nodes_delimiter(textnodes, "**", TextType.BOLD), "*", TextType.ITALIC), "`", TextType.CODE)
+    return textnodes
