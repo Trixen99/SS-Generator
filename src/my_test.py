@@ -1,17 +1,52 @@
 from blocks import *
 
 
-text = """# This is a heading
+####### Heading (7 #'s)
+#Not a heading (no space after #)
+#    Heading (multiple spaces)
 
-This is a paragraph of text. It has some **bold** and *italic* words inside of it.
-
-* This is the first list item in a list block
-* This is a list item
-* This is another list item"""
+#text = "####### Heading"
+#text2 = "#Not a heading"
+#text3 = "#    Heading"
 
 
-t = markdown_to_blocks(text)
+#text = "####### Header" #(7 #'s)
+#text2 = "# Valid header!"
+#text3 = "#Invalid header" #(no space)
+#print(block_to_block_type(text))
+#print(block_to_block_type(text2))
+#print(block_to_block_type(text3))
 
-print(t)
+
+text1 = """#### Heading
+
+This is a Paragraph
+
+1. This
+2. is
+3. an
+4. ordered
+5. list
+
+
+* this
+* is
+* an
+* unordered
+* list
+
+
+> this is 
+> a quote
+
+```this is code```
+"""
+expected = [BlockType.HEADING, BlockType.PARAGRAPH, BlockType.ORDERED_LIST, BlockType.UNORDERED_LIST, BlockType.QUOTE, BlockType.CODE]
+
+#block = markdown_to_blocks(text1)
+#list = []
+#for item in block:
+#    list.append(block_to_block_type(item))
+#print(list)
 
 
