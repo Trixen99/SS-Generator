@@ -1,5 +1,6 @@
 from enum import Enum
 import re
+from htmlnode import *
 
 class BlockType(Enum):
     PARAGRAPH = "paragraph"
@@ -36,7 +37,7 @@ def block_to_block_type(markdown_text):
                 return BlockType.PARAGRAPH
         return BlockType.QUOTE
     
-    elif "*" in markdown_text or "1." in markdown_text:
+    elif markdown_text.startswith("*") or markdown_text.startswith("-") or markdown_text.startswith("1."):
         individual_lines = markdown_text.split("\n")
         if individual_lines[0][0] == "*" or individual_lines[0][0] == "-":
             for line in individual_lines:
@@ -60,6 +61,32 @@ def block_to_block_type(markdown_text):
             else:
                 return BlockType.ORDERED_LIST
     return BlockType.PARAGRAPH
+
+
+
+
+
+
+def markdown_to_html_node(markdown):
+    blocks_list = markdown_to_blocks(markdown)
+    for block in blocks_list:
+        print(block_to_block_type(block))
+        match block_to_block_type(block):
+            case BlockType.PARAGRAPH:
+                new_html_node = HTMLNode(tag="p", value=block)
+                print(new_html_node)
+            case BlockType.HEADING:
+                pass
+            case BlockType.CODE:
+                pass
+            case BlockType.QUOTE:
+                pass
+            case BlockType.UNORDERED_LIST:
+                pass
+            case BlockType.ORDERED_LIST:
+                pass
+            case _:
+                raise Exception("a non valid block type has been provided")
 
 
 
