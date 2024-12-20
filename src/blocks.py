@@ -1,6 +1,7 @@
 from enum import Enum
 import re
 from htmlnode import *
+from split_nodes import *
 
 class BlockType(Enum):
     PARAGRAPH = "paragraph"
@@ -70,21 +71,58 @@ def block_to_block_type(markdown_text):
 def markdown_to_html_node(markdown):
     blocks_list = markdown_to_blocks(markdown)
     for block in blocks_list:
-        print(block_to_block_type(block))
         match block_to_block_type(block):
             case BlockType.PARAGRAPH:
-                new_html_node = HTMLNode(tag="p", value=block)
-                print(new_html_node)
+                paragraph = text_to_textnodes(block)
+                list = []
+                for node in paragraph:
+                    if node.text_type == TextType.BOLD:
+                        list.append(LeafNode(tag="b", value=node.text))
+                    elif node.text_type == TextType.ITALIC:
+                        list.append(LeafNode(tag="i", value=node.text))
+                    elif node.text_type == TextType.TEXT:
+                        list.append(LeafNode(None,node.text))
+                html = HTMLNode("p",None, list, None)
+                print(html)
+
+
+
+
+                #segments = block.split("\n")
+                #leaf_list = []
+                #for segment in segments:
+                #    leaf_list.append(LeafNode(value=segment))
+                #paragraph = ParentNode(tag="p",children=leaf_list)
+                #print(paragraph)
+
+
+
+
+
+                #new_html_node = HTMLNode(tag="p", value=block)
+
             case BlockType.HEADING:
-                pass
+                first_6_characters = block[:7]
+                hashtag_count = 0
+                for character in first_6_characters:
+                    if character =="#":
+                        hashtag_count += 1
+                    else:
+                        new_html_node = HTMLNode(tag=f"h{hashtag_count}", value=block)
+                        break
+
             case BlockType.CODE:
                 pass
+
             case BlockType.QUOTE:
                 pass
+
             case BlockType.UNORDERED_LIST:
                 pass
+
             case BlockType.ORDERED_LIST:
                 pass
+
             case _:
                 raise Exception("a non valid block type has been provided")
 
