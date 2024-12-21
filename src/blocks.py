@@ -70,46 +70,14 @@ def block_to_block_type(markdown_text):
 
 def markdown_to_html_node(markdown):
     blocks_list = markdown_to_blocks(markdown)
+    current_node_list = []
     for block in blocks_list:
         match block_to_block_type(block):
             case BlockType.PARAGRAPH:
-                paragraph = text_to_textnodes(block)
-                list = []
-                for node in paragraph:
-                    if node.text_type == TextType.BOLD:
-                        list.append(LeafNode(tag="b", value=node.text))
-                    elif node.text_type == TextType.ITALIC:
-                        list.append(LeafNode(tag="i", value=node.text))
-                    elif node.text_type == TextType.TEXT:
-                        list.append(LeafNode(None,node.text))
-                html = HTMLNode("p",None, list, None)
-                print(html)
-
-
-
-
-                #segments = block.split("\n")
-                #leaf_list = []
-                #for segment in segments:
-                #    leaf_list.append(LeafNode(value=segment))
-                #paragraph = ParentNode(tag="p",children=leaf_list)
-                #print(paragraph)
-
-
-
-
-
-                #new_html_node = HTMLNode(tag="p", value=block)
+                current_node_list.extend(block_type_paragraph(block))
 
             case BlockType.HEADING:
-                first_6_characters = block[:7]
-                hashtag_count = 0
-                for character in first_6_characters:
-                    if character =="#":
-                        hashtag_count += 1
-                    else:
-                        new_html_node = HTMLNode(tag=f"h{hashtag_count}", value=block)
-                        break
+                current_node_list.extend(block_type_heading(block)) 
 
             case BlockType.CODE:
                 pass
@@ -125,6 +93,38 @@ def markdown_to_html_node(markdown):
 
             case _:
                 raise Exception("a non valid block type has been provided")
+    return ParentNode("body", current_node_list, None)
 
 
 
+
+
+def block_type_paragraph(block):
+    paragraph = text_to_textnodes(block)
+    node_list = []
+    for node in paragraph:
+        if node.text_type == TextType.BOLD:
+            node_list.append(LeafNode(tag="b", value=node.text))
+        elif node.text_type == TextType.ITALIC:
+            node_list.append(LeafNode(tag="i", value=node.text))
+        elif node.text_type == TextType.TEXT:
+            node_list.append(LeafNode(None,node.text))
+        elif node.text_type == TextType.IMAGE:
+            node_list.append(LeafNode("img", node.text, {"src": f"{node.url}"}))
+        elif node.text_type == TextType.CODE:
+            node_list.append(LeafNode("code",node.text,None))
+        elif node.text_type == TextType.LINK:
+            node_list.append(LeafNode("a", node.text, {"href": f"{node.url}"}))
+    return [ParentNode("p", node_list, None)]
+
+def block_type_heading(block):
+    node_list = []
+    first_6_characters = block[:7]
+    hashtag_count = 0
+    for character in first_6_characters:
+        if character =="#":
+            hashtag_count += 1
+        else:
+            node_list.append(LeafNode(value=block.strip("#").strip()))
+            break
+    return [ParentNode(f"h{hashtag_count}", node_list, None)]
