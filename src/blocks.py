@@ -2,6 +2,7 @@ from enum import Enum
 import re
 from htmlnode import *
 from split_nodes import *
+from delimiter import *
 
 class BlockType(Enum):
     PARAGRAPH = "paragraph"
@@ -80,16 +81,16 @@ def markdown_to_html_node(markdown):
                 current_node_list.extend(block_type_heading(block)) 
 
             case BlockType.CODE:
-                pass
+                current_node_list.extend(block_type_code(block)) 
 
             case BlockType.QUOTE:
-                pass
+                current_node_list.extend(block_type_quote(block)) 
 
             case BlockType.UNORDERED_LIST:
-                pass
+                current_node_list.extend(block_type_unordered_list(block)) 
 
             case BlockType.ORDERED_LIST:
-                pass
+                current_node_list.extend(block_type_ordered_list(block)) 
 
             case _:
                 raise Exception("a non valid block type has been provided")
@@ -103,28 +104,54 @@ def block_type_paragraph(block):
     paragraph = text_to_textnodes(block)
     node_list = []
     for node in paragraph:
-        if node.text_type == TextType.BOLD:
-            node_list.append(LeafNode(tag="b", value=node.text))
-        elif node.text_type == TextType.ITALIC:
-            node_list.append(LeafNode(tag="i", value=node.text))
-        elif node.text_type == TextType.TEXT:
-            node_list.append(LeafNode(None,node.text))
-        elif node.text_type == TextType.IMAGE:
-            node_list.append(LeafNode("img", node.text, {"src": f"{node.url}"}))
-        elif node.text_type == TextType.CODE:
-            node_list.append(LeafNode("code",node.text,None))
-        elif node.text_type == TextType.LINK:
-            node_list.append(LeafNode("a", node.text, {"href": f"{node.url}"}))
+        node_list.append(text_node_converter(node))
     return [ParentNode("p", node_list, None)]
 
+
 def block_type_heading(block):
+    text_nodes = text_to_textnodes(block)
     node_list = []
-    first_6_characters = block[:7]
     hashtag_count = 0
-    for character in first_6_characters:
+
+    for character in text_nodes[0].text:
         if character =="#":
             hashtag_count += 1
         else:
-            node_list.append(LeafNode(value=block.strip("#").strip()))
             break
+    redacted_text_nodes_list = text_nodes.copy()
+    if redacted_text_nodes_list[0].text[0] == "#":
+        redacted_text_nodes_list.pop(0)
+
+    for node in redacted_text_nodes_list:
+        node_list.append(text_node_converter(node))
+        continue
+    
     return [ParentNode(f"h{hashtag_count}", node_list, None)]
+
+
+def block_type_code(block):
+    pass
+
+def block_type_quote(block):
+    pass
+
+def block_type_unordered_list(block):
+    pass
+
+def block_type_ordered_list(block):
+    pass
+
+
+def text_node_converter(node):
+    if node.text_type == TextType.BOLD:
+        return LeafNode(tag="b", value=node.text)
+    elif node.text_type == TextType.ITALIC:
+        return LeafNode(tag="i", value=node.text)
+    elif node.text_type == TextType.TEXT:
+        return LeafNode(None,node.text)
+    elif node.text_type == TextType.IMAGE:
+        return LeafNode("img", node.text, {"src": f"{node.url}"})
+    elif node.text_type == TextType.CODE:
+        return LeafNode("code",node.text,None)
+    elif node.text_type == TextType.LINK:
+        return LeafNode("a", node.text, {"href": f"{node.url}"})
