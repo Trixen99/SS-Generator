@@ -129,17 +129,28 @@ def block_type_heading(block):
     return [ParentNode(f"h{hashtag_count}", node_list, None)]
 
 
+
 def block_type_code(block):
-    pass
+    hello = [LeafNode("b","hello")]
+    return "h"
 
 def block_type_quote(block):
-    pass
+    split_lines = block.split("\n")
+    leaf_nodes = []
+    leaf_nodes.append(LeafNode(None,"\n"))
+    for line in split_lines:
+        stripped_line = line.lstrip(">").strip()
+        leaf_nodes.append(LeafNode(None,f"{stripped_line}\n"))
+    return [ParentNode("blockquote", leaf_nodes,None)]
+
 
 def block_type_unordered_list(block):
-    pass
+    hello = [LeafNode("b","hello")]
+    return "h"
 
 def block_type_ordered_list(block):
-    pass
+    hello = [LeafNode("b","hello")]
+    return "h"
 
 
 def text_node_converter(node):

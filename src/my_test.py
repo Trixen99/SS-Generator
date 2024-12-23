@@ -2,21 +2,7 @@ from blocks import *
 
 
 
-text = """# **Header** *look*
-
-
-## **Header**
-
-
-### **Header**
-
-
-#### **Header**
-
-
-##### Header"""
-
-#paragraph `code`"""
+text = """> Hello you"""
 
 #print(markdown_to_html_node(text))
 
@@ -25,4 +11,5 @@ text = """# **Header** *look*
 
 
 node = markdown_to_html_node(text)
+#print(node)
 print(node.to_html())
