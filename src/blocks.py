@@ -94,7 +94,7 @@ def markdown_to_html_node(markdown):
 
             case _:
                 raise Exception("a non valid block type has been provided")
-    return ParentNode("body", current_node_list, None)
+    return ParentNode("div", current_node_list, None)
 
 
 
@@ -136,12 +136,16 @@ def block_type_code(block):
 
 def block_type_quote(block):
     split_lines = block.split("\n")
+    for line_number in range(len(split_lines)):
+        split_lines[line_number] = split_lines[line_number].strip(">").strip()
+    unsplit_lines = " ".join(split_lines)
+    text_nodes = []
+    text_nodes.extend(text_to_textnodes(unsplit_lines))
     leaf_nodes = []
-    leaf_nodes.append(LeafNode(None,"\n"))
-    for line in split_lines:
-        stripped_line = line.lstrip(">").strip()
-        leaf_nodes.append(LeafNode(None,f"{stripped_line}\n"))
-    return [ParentNode("blockquote", leaf_nodes,None)]
+    for node in text_nodes:
+        leaf_nodes.append(text_node_converter(node))
+    return [ParentNode("blockquote", leaf_nodes, None)]
+    return "h"
 
 
 def block_type_unordered_list(block):
