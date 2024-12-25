@@ -109,23 +109,21 @@ def block_type_paragraph(block):
 
 
 def block_type_heading(block):
-    text_nodes = text_to_textnodes(block)
+    editted_block = block.lstrip("# ")
+    text_nodes = text_to_textnodes(editted_block)
     node_list = []
     hashtag_count = 0
 
-    for character in text_nodes[0].text:
+    for character in block[0:7]:
         if character =="#":
             hashtag_count += 1
         else:
             break
     redacted_text_nodes_list = text_nodes.copy()
-    if redacted_text_nodes_list[0].text[0] == "#":
-        redacted_text_nodes_list.pop(0)
 
     for node in redacted_text_nodes_list:
         node_list.append(text_node_converter(node))
         continue
-    
     return [ParentNode(f"h{hashtag_count}", node_list, None)]
 
 
@@ -145,7 +143,6 @@ def block_type_quote(block):
     for node in text_nodes:
         leaf_nodes.append(text_node_converter(node))
     return [ParentNode("blockquote", leaf_nodes, None)]
-    return "h"
 
 
 def block_type_unordered_list(block):
