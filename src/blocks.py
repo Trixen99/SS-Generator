@@ -129,8 +129,10 @@ def block_type_heading(block):
 
 
 def block_type_code(block):
-    hello = [LeafNode("b","hello")]
-    return "h"
+    new_block = block.strip("` ")
+    leaf_node = LeafNode(None,new_block,None)
+    return [ParentNode("code", [leaf_node], None)]
+
 
 def block_type_quote(block):
     split_lines = block.split("\n")
@@ -146,8 +148,17 @@ def block_type_quote(block):
 
 
 def block_type_unordered_list(block):
-    hello = [LeafNode("b","hello")]
-    return "h"
+    split_block = block.split("\n")
+    parent_nodes = []
+    for section in split_block:
+        leaf_nodes = []
+        editted_section = section.lstrip("- *")
+        text_nodes = (text_to_textnodes(editted_section))
+        for node in text_nodes:
+            leaf_nodes.append(text_node_converter(node))
+        parent_nodes.extend([ParentNode("li", leaf_nodes, None)])
+    return [ParentNode("ul", parent_nodes, None)]
+
 
 def block_type_ordered_list(block):
     hello = [LeafNode("b","hello")]

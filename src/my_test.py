@@ -3,10 +3,9 @@ from blocks import *
 
 
 text = """* Hello
-- My friend
-* I **am**
-- God
-* Today"""
+* my **man**
+- hello
+- Madam"""
 
 
 
@@ -16,5 +15,5 @@ text = """* Hello
 
 
 node = markdown_to_html_node(text)
-print(node)
+#print(node)
 print(node.to_html())
