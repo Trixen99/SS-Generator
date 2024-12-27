@@ -23,6 +23,7 @@ def markdown_to_blocks(markdown):
 
 
 def block_to_block_type(markdown_text):
+    #any more than 6 #, returns a paragraph
     if re.match(r"^\#{1,6}\ .+", markdown_text):
         return BlockType.HEADING
 
@@ -131,7 +132,7 @@ def block_type_heading(block):
 def block_type_code(block):
     new_block = block.strip("` ")
     leaf_node = LeafNode(None,new_block,None)
-    return [ParentNode("code", [leaf_node], None)]
+    return [ParentNode("pre", [ParentNode("code", [leaf_node], None)],None)]
 
 
 def block_type_quote(block):
@@ -161,8 +162,16 @@ def block_type_unordered_list(block):
 
 
 def block_type_ordered_list(block):
-    hello = [LeafNode("b","hello")]
-    return "h"
+    split_block = block.split("\n")
+    parent_nodes = []
+    for section in split_block:
+        leaf_nodes = []
+        editted_section = section.lstrip("1234567890. ")
+        text_nodes = (text_to_textnodes(editted_section))
+        for node in text_nodes:
+            leaf_nodes.append(text_node_converter(node))
+        parent_nodes.extend([ParentNode("li", leaf_nodes, None)])
+    return [ParentNode("ol", parent_nodes, None)]
 
 
 def text_node_converter(node):
