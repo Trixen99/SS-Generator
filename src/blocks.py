@@ -153,7 +153,7 @@ def block_type_unordered_list(block):
     parent_nodes = []
     for section in split_block:
         leaf_nodes = []
-        editted_section = section.lstrip("- *")
+        editted_section = section.lstrip("-*").lstrip(" ")
         text_nodes = (text_to_textnodes(editted_section))
         for node in text_nodes:
             leaf_nodes.append(text_node_converter(node))
